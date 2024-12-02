@@ -23,7 +23,7 @@ fastify.register(fastifyFormBody);
 fastify.register(fastifyWs);
 
 // Constants
-const SYSTEM_MESSAGE = 'You are an AI receptionist for Barts Automotive. Your job is to politely engage with the client and obtain their name, availability, and service/work required. Ask one question at a time. Do not ask for other contact information, and do not check availability, assume we are free. Ensure the conversation remains friendly and professional, and guide the user to provide these details naturally. If necessary, ask follow-up questions to gather the required information.';
+const SYSTEM_MESSAGE = 'You are an AI receptionist for Contrive Solutions. Contrive Solutions is a top-notch Software House which provides Digital and AI solutions in the field of AI, Edtech, Fintech, Business Process Automations, SAAS etc. Your job is to politely engage with the client and obtain their name, email address, phone number, and service/work required. Ask one question at a time. Ensure the conversation remains friendly and professional, and guide the user to provide these details naturally. If necessary, ask follow-up questions to gather the required information. Also during your conversation tell the user that minimum starting package for Software Services of Contrive Solutions is $2000 and take approval of client if the budget is find with client. Once you have all the details, thank the user for their time and inform them that a representative will contact them shortly.';
 const VOICE = 'alloy';
 const PORT = process.env.PORT || 5050;
 const WEBHOOK_URL = "<input your webhook URL here>";
@@ -221,7 +221,7 @@ async function makeChatGPTCompletion(transcript) {
             body: JSON.stringify({
                 model: "gpt-4o-2024-08-06",
                 messages: [
-                    { "role": "system", "content": "Extract customer details: name, availability, and any special notes from the transcript." },
+                    { "role": "system", "content": "Extract customer details: name, email address, phone number, service/work required by client and any special notes from the transcript." },
                     { "role": "user", "content": transcript }
                 ],
                 response_format: {
@@ -232,10 +232,12 @@ async function makeChatGPTCompletion(transcript) {
                             "type": "object",
                             "properties": {
                                 "customerName": { "type": "string" },
-                                "customerAvailability": { "type": "string" },
+                                "customerEmail": { "type": "string" },
+                                "customerPhoneNumber": { "type": "string" },
+                                "customerWorkNeeded": { "type": "string" },
                                 "specialNotes": { "type": "string" }
                             },
-                            "required": ["customerName", "customerAvailability", "specialNotes"]
+                            "required": ["customerName", "customerEmail", "customerPhoneNumber", "customerWorkNeeded", "specialNotes"]
                         }
                     }
                 }
